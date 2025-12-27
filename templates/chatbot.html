@@ -1,0 +1,315 @@
+{% extends 'base.html' %}
+
+{% block title %}AI Assistant - JobMatchAI{% endblock %}
+
+{% block content %}
+<div class="chatbot-section">
+    <div class="container">
+        <div class="chatbot-header">
+            <h1><i class="fas fa-robot"></i> AI Assistant</h1>
+            <p>Ask me anything about jobs, career advice, or job search strategies</p>
+            
+            <!-- Mode Toggle -->
+            <div class="mode-toggle">
+                <button class="mode-btn active" id="jobAssistantBtn" data-mode="job">
+                    <i class="fas fa-briefcase"></i> AI Job Assistant
+                </button>
+                <button class="mode-btn" id="aiChatBtn" data-mode="chat">
+                    <i class="fas fa-comments"></i> AI Chat
+                </button>
+            </div>
+            <p class="mode-description" id="modeDescription">
+                Get help with job search, CV tips, interview preparation, and career advice
+            </p>
+        </div>
+
+        <div class="chatbot-container">
+            <div class="chat-sidebar">
+                <div class="chat-info-card" id="jobAssistantInfo">
+                    <h3><i class="fas fa-info-circle"></i> I Can Help With</h3>
+                    <ul>
+                        <li><i class="fas fa-check"></i> Job search strategies</li>
+                        <li><i class="fas fa-check"></i> CV tips</li>
+                        <li><i class="fas fa-check"></i> Interview preparation</li>
+                        <li><i class="fas fa-check"></i> Career advice</li>
+                        <li><i class="fas fa-check"></i> Skill development</li>
+                    </ul>
+                </div>
+
+                <div class="chat-info-card" id="aiChatInfo" style="display: none;">
+                    <h3><i class="fas fa-comments"></i> AI Chat Mode</h3>
+                    <ul>
+                        <li><i class="fas fa-check"></i> General conversation</li>
+                        <li><i class="fas fa-check"></i> Answer questions</li>
+                        <li><i class="fas fa-check"></i> Explain concepts</li>
+                        <li><i class="fas fa-check"></i> Help with tasks</li>
+                        <li><i class="fas fa-check"></i> Creative assistance</li>
+                    </ul>
+                </div>
+
+                {% if cv_data %}
+                <div class="chat-info-card">
+                    <h3><i class="fas fa-user"></i> Your Profile</h3>
+                    <div class="profile-mini">
+                        <p><strong>Skills:</strong> {{ cv_data.skills|truncatewords:5 }}</p>
+                        <p><strong>Experience:</strong> {{ cv_data.experience_years }} years</p>
+                        <p><strong>Education:</strong> {{ cv_data.education }}</p>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="chat-info-card chat-warning">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Note</h3>
+                    <p>I have your CV data and can provide personalized advice in Job Assistant mode!</p>
+                </div>
+            </div>
+
+            <div class="chat-main">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message">
+                        <div class="message-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content" id="welcomeMessage">
+                            Hello! 👋 I'm here to help with your job search. You can ask me about:
+                            
+                            • Job search strategies
+                            • CV tips
+                            • Interview preparation
+                            • Career advice
+                            • Skill development
+                            
+                            What would you like to know?
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-suggestions" id="jobSuggestions">
+                    <div class="suggestion-chip" data-message="Job search strategies">Job search strategies</div>
+                    <div class="suggestion-chip" data-message="Improve my CV">Improve my CV</div>
+                    <div class="suggestion-chip" data-message="In-demand skills">In-demand skills</div>
+                    <div class="suggestion-chip" data-message="Interview tips">Interview tips</div>
+                </div>
+
+                <div class="chat-suggestions" id="chatSuggestions" style="display: none;">
+                    <div class="suggestion-chip" data-message="Tell me a joke">Tell me a joke</div>
+                    <div class="suggestion-chip" data-message="Explain quantum computing">Explain quantum computing</div>
+                    <div class="suggestion-chip" data-message="Write a poem">Write a poem</div>
+                    <div class="suggestion-chip" data-message="Help me brainstorm">Help me brainstorm</div>
+                </div>
+
+                <div class="chat-input-area">
+                    <form class="chat-form" id="chatForm">
+                        <input 
+                            type="text" 
+                            class="chat-input" 
+                            id="chatInput" 
+                            placeholder="Ask me anything about jobs and careers..."
+                            autocomplete="off"
+                        >
+                        <button type="submit" class="btn btn-primary btn-send">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const chatMessages = document.getElementById('chatMessages');
+    const chatForm = document.getElementById('chatForm');
+    const chatInput = document.getElementById('chatInput');
+    const suggestionChips = document.querySelectorAll('.suggestion-chip');
+    
+    // Mode toggle elements
+    const jobAssistantBtn = document.getElementById('jobAssistantBtn');
+    const aiChatBtn = document.getElementById('aiChatBtn');
+    const modeDescription = document.getElementById('modeDescription');
+    const jobAssistantInfo = document.getElementById('jobAssistantInfo');
+    const aiChatInfo = document.getElementById('aiChatInfo');
+    const jobSuggestions = document.getElementById('jobSuggestions');
+    const chatSuggestions = document.getElementById('chatSuggestions');
+    const welcomeMessage = document.getElementById('welcomeMessage');
+    
+    let conversationHistory = [];
+    let currentMode = 'job'; // 'job' or 'chat'
+    
+    // Mode toggle functionality
+    jobAssistantBtn.addEventListener('click', function() {
+        switchMode('job');
+    });
+    
+    aiChatBtn.addEventListener('click', function() {
+        switchMode('chat');
+    });
+    
+    function switchMode(mode) {
+        currentMode = mode;
+        
+        if (mode === 'job') {
+            // Switch to Job Assistant mode
+            jobAssistantBtn.classList.add('active');
+            aiChatBtn.classList.remove('active');
+            modeDescription.textContent = 'Get help with job search, CV tips, interview preparation, and career advice';
+            jobAssistantInfo.style.display = 'block';
+            aiChatInfo.style.display = 'none';
+            jobSuggestions.style.display = 'flex';
+            chatSuggestions.style.display = 'none';
+            chatInput.placeholder = 'Ask me anything about jobs and careers...';
+            
+            // Update welcome message
+            welcomeMessage.innerHTML = `Hello! 👋 I'm here to help with your job search. You can ask me about:
+            
+- Job search strategies
+- CV tips
+- Interview preparation
+- Career advice
+- Skill development
+
+What would you like to know?`;
+        } else {
+            // Switch to AI Chat mode
+            aiChatBtn.classList.add('active');
+            jobAssistantBtn.classList.remove('active');
+            modeDescription.textContent = 'General AI assistant for any questions, explanations, or creative tasks';
+            jobAssistantInfo.style.display = 'none';
+            aiChatInfo.style.display = 'block';
+            jobSuggestions.style.display = 'none';
+            chatSuggestions.style.display = 'flex';
+            chatInput.placeholder = 'Ask me anything...';
+            
+            // Update welcome message
+            welcomeMessage.innerHTML = `Hello! 👋 I'm your AI assistant. I can help you with:
+
+- Answering questions
+- Explaining concepts
+- Writing and editing
+- Problem solving
+- Creative tasks
+- General conversation
+
+What can I help you with today?`;
+        }
+        
+        // Clear conversation history when switching modes
+        conversationHistory = [];
+    }
+    
+    // Handle suggestion chips
+    suggestionChips.forEach(chip => {
+        chip.addEventListener('click', function() {
+            const message = this.getAttribute('data-message');
+            chatInput.value = message;
+            chatForm.dispatchEvent(new Event('submit'));
+        });
+    });
+    
+    // Handle form submission
+    chatForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const userMessage = chatInput.value.trim();
+        if (!userMessage) return;
+        
+        // Add user message to chat
+        addMessage(userMessage, 'user');
+        chatInput.value = '';
+        
+        // Show typing indicator
+        const typingId = showTypingIndicator();
+        
+        try {
+            // Send to backend with mode information
+            const response = await fetch('{% url "chat_api" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    message: userMessage,
+                    history: conversationHistory,
+                    mode: currentMode  // Send current mode to backend
+                })
+            });
+            
+            const data = await response.json();
+            
+            // Remove typing indicator
+            removeTypingIndicator(typingId);
+            
+            if (data.success) {
+                // Add bot response
+                addMessage(data.response, 'bot');
+                
+                // Update conversation history
+                conversationHistory.push({
+                    role: 'user',
+                    content: userMessage
+                });
+                conversationHistory.push({
+                    role: 'assistant',
+                    content: data.response
+                });
+            } else {
+                addMessage('Sorry, I encountered an error. Please try again.', 'bot');
+            }
+        } catch (error) {
+            removeTypingIndicator(typingId);
+            addMessage('Sorry, I couldn\'t process your request. Please try again.', 'bot');
+            console.error('Chat error:', error);
+        }
+    });
+    
+    function addMessage(text, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender === 'user' ? 'user-message' : ''}`;
+        
+        const avatar = document.createElement('div');
+        avatar.className = 'message-avatar';
+        avatar.innerHTML = sender === 'user' ? '<i class="fas fa-user"></i>' : '<i class="fas fa-robot"></i>';
+        
+        const content = document.createElement('div');
+        content.className = 'message-content';
+        content.textContent = text;
+        
+        messageDiv.appendChild(avatar);
+        messageDiv.appendChild(content);
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    function showTypingIndicator() {
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'message';
+        typingDiv.id = 'typing-indicator-' + Date.now();
+        
+        const avatar = document.createElement('div');
+        avatar.className = 'message-avatar';
+        avatar.innerHTML = '<i class="fas fa-robot"></i>';
+        
+        const content = document.createElement('div');
+        content.className = 'message-content typing-indicator';
+        content.innerHTML = '<span></span><span></span><span></span>';
+        
+        typingDiv.appendChild(avatar);
+        typingDiv.appendChild(content);
+        chatMessages.appendChild(typingDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        
+        return typingDiv.id;
+    }
+    
+    function removeTypingIndicator(id) {
+        const indicator = document.getElementById(id);
+        if (indicator) {
+            indicator.remove();
+        }
+    }
+});
+</script>
+{% endblock %}

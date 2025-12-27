@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}JobMatchAI - Find Your Perfect Job{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="{% url 'home' %}" class="nav-brand">
+                <i class="fas fa-briefcase"></i>
+                <strong>JobMatchAI</strong>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="{% url 'upload_cv' %}" class="{% if request.resolver_match.url_name == 'upload_cv' %}active{% endif %}"><i class="fas fa-upload"></i> Upload CV</a></li>
+                <li><a href="{% url 'chatbot' %}" class="{% if request.resolver_match.url_name == 'chatbot' %}active{% endif %}"><i class="fas fa-robot"></i> AI Assistant</a></li>
+                <li><a href="{% url 'government_jobs' %}" class="{% if request.resolver_match.url_name == 'government_jobs' %}active{% endif %}"><i class="fas fa-landmark"></i> Government Jobs</a></li>
+                <li><a href="{% url 'company_jobs' %}" class="{% if request.resolver_match.url_name == 'company_jobs' %}active{% endif %}"><i class="fas fa-building"></i> Company Jobs</a></li>
+                <li>
+                    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                        <i class="fas fa-sun theme-icon-sun"></i>
+                        <i class="fas fa-moon theme-icon-moon"></i>
+                    </button>
+                </li>
+                <li><a href="{% url 'reset_session' %}" class="btn-reset {% if request.resolver_match.url_name == 'reset_session' %}active{% endif %}"><i class="fas fa-redo"></i> Start Over</a></li>
+            </ul>
+            <div class="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    {% block content %}
+    {% endblock %}
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3><i class="fas fa-briefcase"></i> JobMatchAI</h3>
+                    <p>Your AI-powered job search assistant. Find verified opportunities from trusted sources worldwide.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'upload_cv' %}">Upload CV</a></li>
+                        <li><a href="{% url 'government_jobs' %}">Government Jobs</a></li>
+                        <li><a href="{% url 'company_jobs' %}">Company Jobs</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Trusted Sources</h4>
+                    <ul class="trusted-sources">
+                        <li><i class="fab fa-linkedin"></i> LinkedIn</li>
+                        <li><i class="fas fa-globe"></i> Indeed</li>
+                        <li><i class="fas fa-building"></i> Glassdoor</li>
+                        <li><i class="fas fa-landmark"></i> Government Portals</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 JobMatchAI. All rights reserved. | Powered by Ratan Kumar Majhi</p>
+            </div>
+        </div>
+    </footer>
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

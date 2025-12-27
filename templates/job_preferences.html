@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block title %}Job Preferences - JobMatchAI{% endblock %}
+
+{% block content %}
+<div class="preferences-section">
+    <div class="container">
+        <div class="preferences-header">
+            <h1><i class="fas fa-sliders-h"></i> Set Your Job Preferences</h1>
+            <p>Help us find the perfect job matches for you</p>
+        </div>
+
+        <div class="preferences-container">
+            {% if cv_data %}
+            <div class="cv-summary-card">
+                <h3><i class="fas fa-user-check"></i> Your Profile Summary</h3>
+                <div class="profile-details">
+                    <div class="profile-item">
+                        <i class="fas fa-briefcase"></i>
+                        <div>
+                            <strong>Experience:</strong>
+                            <span>{{ cv_data.experience_years }} years</span>
+                        </div>
+                    </div>
+                    <div class="profile-item">
+                        <i class="fas fa-code"></i>
+                        <div>
+                            <strong>Skills:</strong>
+                            <span>{{ cv_data.skills }}</span>
+                        </div>
+                    </div>
+                    <div class="profile-item">
+                        <i class="fas fa-graduation-cap"></i>
+                        <div>
+                            <strong>Education:</strong>
+                            <span>{{ cv_data.education }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="preferences-form-card">
+                <h3><i class="fas fa-search"></i> Job Search Criteria</h3>
+                
+                <form method="post" action="{% url 'job_preferences' %}">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label for="{{ form.job_type.id_for_label }}">
+                            <i class="fas fa-briefcase"></i> {{ form.job_type.label }}
+                        </label>
+                        {{ form.job_type }}
+                        <small>{{ form.job_type.help_text }}</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.job_title.id_for_label }}">
+                            <i class="fas fa-user-tie"></i> {{ form.job_title.label }}
+                        </label>
+                        {{ form.job_title }}
+                        <small>{{ form.job_title.help_text }}</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.location.id_for_label }}">
+                            <i class="fas fa-map-marker-alt"></i> {{ form.location.label }}
+                        </label>
+                        {{ form.location }}
+                        <small>{{ form.location.help_text }}</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.experience_level.id_for_label }}">
+                            <i class="fas fa-layer-group"></i> {{ form.experience_level.label }}
+                        </label>
+                        {{ form.experience_level }}
+                        <small>{{ form.experience_level.help_text }}</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.date_posted.id_for_label }}">
+                            <i class="fas fa-calendar-alt"></i> {{ form.date_posted.label }}
+                        </label>
+                        {{ form.date_posted }}
+                        <small>{{ form.date_posted.help_text }}</small>
+                    </div>
+
+                    <div class="form-actions">
+                        <a href="{% url 'upload_cv' %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Back
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Find Matching Jobs
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

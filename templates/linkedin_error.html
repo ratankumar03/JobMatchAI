@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block title %}LinkedIn Connection Error - JobMatchAI{% endblock %}
+
+{% block content %}
+<div class="results-section">
+    <div class="container">
+        <div class="error-card">
+            <div class="error-icon">
+                <i class="fas fa-exclamation-triangle" style="color: #dc3545; font-size: 64px;"></i>
+            </div>
+            <h1 style="color: #dc3545; margin-top: 20px;">
+                LinkedIn Connection Failed
+            </h1>
+
+            <div class="error-message" style="margin: 30px 0; padding: 20px; background: #f8d7da; border-radius: 8px; border-left: 4px solid #dc3545;">
+                <h3><i class="fas fa-times-circle"></i> Error Details</h3>
+                <p style="color: #721c24; margin-top: 10px; font-family: monospace;">
+                    {{ error|default:"Unknown error occurred during LinkedIn authentication" }}
+                </p>
+            </div>
+
+            <div class="troubleshooting" style="margin: 30px 0; text-align: left;">
+                <h3><i class="fas fa-wrench"></i> Troubleshooting Steps</h3>
+                <ul style="line-height: 2; margin-top: 15px; color: #666;">
+                    <li><i class="fas fa-arrow-right"></i> Make sure you approved the LinkedIn permissions</li>
+                    <li><i class="fas fa-arrow-right"></i> Check that your LinkedIn credentials are correct</li>
+                    <li><i class="fas fa-arrow-right"></i> Verify that the callback URL is correctly configured</li>
+                    <li><i class="fas fa-arrow-right"></i> Try clearing your browser cookies and cache</li>
+                    <li><i class="fas fa-arrow-right"></i> Contact support if the issue persists</li>
+                </ul>
+            </div>
+
+            <div class="action-buttons" style="margin-top: 30px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                <a href="{% url 'linkedin_login' %}" class="btn btn-primary btn-large">
+                    <i class="fab fa-linkedin"></i> Try Again
+                </a>
+                <a href="{% url 'upload_cv' %}" class="btn btn-secondary btn-large">
+                    <i class="fas fa-upload"></i> Upload CV Instead
+                </a>
+                <a href="{% url 'home' %}" class="btn btn-outline btn-large">
+                    <i class="fas fa-home"></i> Go to Home
+                </a>
+            </div>
+
+            <div class="alternative-options" style="margin-top: 40px; padding: 20px; background: #e7f3ff; border-radius: 4px;">
+                <h4><i class="fas fa-lightbulb"></i> Alternative Options</h4>
+                <p style="margin-top: 10px; color: #555;">
+                    You can still use JobMatchAI without LinkedIn! Upload your CV manually to get AI-powered job recommendations.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.error-card {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 40px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.btn-large {
+    padding: 12px 24px;
+    font-size: 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: #0077B5;
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover {
+    background: #005885;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 119, 181, 0.4);
+}
+
+.btn-secondary {
+    background: #64748b;
+    color: white;
+    border: none;
+}
+
+.btn-secondary:hover {
+    background: #475569;
+    transform: translateY(-2px);
+}
+
+.btn-outline {
+    background: white;
+    color: #6366f1;
+    border: 2px solid #6366f1;
+}
+
+.btn-outline:hover {
+    background: #6366f1;
+    color: white;
+    transform: translateY(-2px);
+}
+</style>
+{% endblock %}

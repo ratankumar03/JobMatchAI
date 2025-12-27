@@ -1,0 +1,283 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload CV - JobMatchAI{% endblock %}
+
+{% block content %}
+<div class="upload-section">
+    <div class="container">
+        <div class="upload-header">
+            <h1><i class="fas fa-file-upload"></i> Upload Your CV</h1>
+            <p>Upload your CV in PDF or DOCX format and let AI analyze your profile</p>
+        </div>
+
+        {% if error %}
+        <div class="alert alert-error">
+            <i class="fas fa-exclamation-circle"></i>
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <div class="upload-container">
+            <div class="upload-card">
+                <form method="post" enctype="multipart/form-data" id="uploadForm">
+                    {% csrf_token %}
+                    
+                    <div class="file-upload-area" id="dropArea">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <h3>Drag & Drop your CV here</h3>
+                        <p>or click to browse</p>
+                        <p class="file-info">Supported formats: PDF, DOCX (Max 10MB)</p>
+                        
+                        <input type="file" name="file" id="fileInput" accept=".pdf,.docx,.doc" required>
+                        
+                        <div class="file-name-display" id="fileNameDisplay">
+                            <i class="fas fa-check-circle success-icon"></i>
+                            <span id="fileName"></span>
+                        </div>
+                    </div>
+
+                    <div class="upload-instructions">
+                        <h4><i class="fas fa-info-circle"></i> What happens next?</h4>
+                        <ul>
+                            <li><i class="fas fa-check"></i> AI extracts your skills and experience</li>
+                            <li><i class="fas fa-check"></i> You specify job preferences</li>
+                            <li><i class="fas fa-check"></i> Get matched with verified job opportunities</li>
+                            <li><i class="fas fa-check"></i> Access direct links to apply</li>
+                        </ul>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-full btn-large" id="uploadBtn">
+                        <i class="fas fa-upload"></i> Upload & Analyze CV
+                    </button>
+                </form>
+            </div>
+
+            <div class="upload-sidebar">
+                <div class="info-card animated-info-card">
+                    <h3><i class="fas fa-shield-alt"></i> Privacy & Security</h3>
+                    <p>Your CV is processed securely and used only for job matching. We never share your information with third parties.</p>
+                </div>
+
+                <div class="info-card animated-info-card" style="animation-delay: 1.67s;">
+                    <h3><i class="fas fa-lightbulb"></i> Tips for Best Results</h3>
+                    <ul>
+                        <li>Use a clear, well-formatted CV</li>
+                        <li>Include relevant skills and experience</li>
+                        <li>Mention specific technologies or tools</li>
+                        <li>List measurable achievements</li>
+                    </ul>
+                </div>
+
+                <div class="info-card animated-info-card" style="animation-delay: 3.33s;">
+                    <h3><i class="fas fa-robot"></i> AI Features</h3>
+                    <ul>
+                        <li>Automatic skill extraction</li>
+                        <li>Experience level detection</li>
+                        <li>Education qualification parsing</li>
+                        <li>Job title identification</li>
+                    </ul>
+                </div>
+            </div>
+
+            <style>
+            @keyframes sidebarColorChange {
+                0% {
+                    background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+                }
+                20% {
+                    background-image: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                    box-shadow: 0 10px 30px rgba(240, 147, 251, 0.3);
+                }
+                40% {
+                    background-image: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+                    box-shadow: 0 10px 30px rgba(79, 172, 254, 0.3);
+                }
+                60% {
+                    background-image: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+                    box-shadow: 0 10px 30px rgba(67, 233, 123, 0.3);
+                }
+                80% {
+                    background-image: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+                    box-shadow: 0 10px 30px rgba(250, 112, 154, 0.3);
+                }
+                100% {
+                    background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+                }
+            }
+
+            .animated-info-card {
+                background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white !important;
+                transition: all 1s ease !important;
+            }
+
+            .animated-info-card:hover {
+                transform: translateY(-5px) scale(1.03) !important;
+                box-shadow: 0 15px 35px rgba(0,0,0,0.3) !important;
+            }
+
+            .animated-info-card h3 {
+                color: white !important;
+                font-size: 18px;
+                margin-bottom: 15px;
+                font-weight: 700;
+            }
+
+            .animated-info-card p,
+            .animated-info-card li {
+                color: rgba(255, 255, 255, 0.95) !important;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+
+            .animated-info-card i {
+                color: white !important;
+            }
+
+            .animated-info-card ul {
+                padding-left: 20px;
+            }
+
+            .animated-info-card li {
+                margin-bottom: 8px;
+            }
+            </style>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const dropArea = document.getElementById('dropArea');
+    const fileInput = document.getElementById('fileInput');
+    const fileNameDisplay = document.getElementById('fileNameDisplay');
+    const fileName = document.getElementById('fileName');
+    const uploadForm = document.getElementById('uploadForm');
+    const uploadBtn = document.getElementById('uploadBtn');
+
+    // Prevent default drag behaviors
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, preventDefaults, false);
+        document.body.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    // Highlight drop area when item is dragged over it
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropArea.addEventListener(eventName, highlight, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, unhighlight, false);
+    });
+
+    function highlight(e) {
+        dropArea.classList.add('drag-over');
+    }
+
+    function unhighlight(e) {
+        dropArea.classList.remove('drag-over');
+    }
+
+    // Handle dropped files
+    dropArea.addEventListener('drop', handleDrop, false);
+
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+
+        if (files.length > 0) {
+            fileInput.files = files;
+            handleFiles(files);
+        }
+    }
+
+    // Click to browse
+    dropArea.addEventListener('click', function(e) {
+        if (e.target.id !== 'fileInput') {
+            fileInput.click();
+        }
+    });
+
+    // Handle file selection
+    fileInput.addEventListener('change', function(e) {
+        if (this.files.length > 0) {
+            handleFiles(this.files);
+        }
+    });
+
+    function handleFiles(files) {
+        const file = files[0];
+        
+        // Validate file type
+        const allowedTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/msword'];
+        if (!allowedTypes.includes(file.type)) {
+            alert('Please upload only PDF or DOCX files.');
+            fileInput.value = '';
+            return;
+        }
+
+        // Validate file size (10MB)
+        const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+        if (file.size > maxSize) {
+            alert('File size must be less than 10MB.');
+            fileInput.value = '';
+            return;
+        }
+
+        // Display file name
+        fileName.textContent = file.name;
+        dropArea.classList.add('has-file');
+        uploadBtn.innerHTML = '<i class="fas fa-check"></i> File Selected - Click to Upload';
+    }
+
+    // Handle form submission
+    uploadForm.addEventListener('submit', function(e) {
+        if (!fileInput.files || fileInput.files.length === 0) {
+            e.preventDefault();
+            alert('Please select a file to upload.');
+            return;
+        }
+
+        // Show loading state
+        uploadBtn.disabled = true;
+        uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading & Processing...';
+    });
+
+    // Automatic color changing for info cards
+    const gradients = [
+        'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+        'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+        'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+        'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+        'linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%)',
+        'linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%)',
+        'linear-gradient(135deg, #fd79a8 0%, #e84393 100%)',
+        'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+        'linear-gradient(135deg, #fdcb6e 0%, #e17055 100%)'
+    ];
+
+    let currentIndex = 0;
+
+    function changeInfoCardColors() {
+        currentIndex = (currentIndex + 1) % gradients.length;
+        const infoCards = document.querySelectorAll('.animated-info-card');
+        infoCards.forEach(card => {
+            card.style.backgroundImage = gradients[currentIndex];
+        });
+    }
+
+    // Change colors every 5 seconds
+    setInterval(changeInfoCardColors, 5000);
+});
+</script>
+{% endblock %}

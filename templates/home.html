@@ -1,0 +1,364 @@
+{% extends 'base.html' %}
+
+{% block title %}JobMatchAI - Find Your Perfect Job with AI{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="hero-title">Find Your Perfect Job with <span class="gradient-text">AI</span></h1>
+            <p class="hero-subtitle">Upload your CV, let AI analyze your skills, and discover verified job opportunities from government and top companies worldwide.</p>
+            
+            <div class="hero-cta">
+                <a href="{% url 'upload_cv' %}" class="btn btn-primary btn-large">
+                    <i class="fas fa-upload"></i> Upload Your CV
+                </a>
+                <a href="{% url 'chatbot' %}" class="btn btn-secondary btn-large">
+                    <i class="fas fa-robot"></i> Chat with AI
+                </a>
+            </div>
+
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span>100% Verified Links</span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Trusted Sources Only</span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-brain"></i>
+                    <span>AI-Powered Matching</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="features-section">
+    <div class="container">
+        <h2 class="section-title animated-title">How It Works</h2>
+        
+        <div class="features-grid">
+            <a href="{% url 'upload_cv' %}" class="feature-card-link">
+                <div class="feature-card animated-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-file-upload"></i>
+                    </div>
+                    <h3>1. Upload Your CV</h3>
+                    <p>Upload your resume in PDF or DOCX format. Our AI will analyze your skills, experience, and qualifications.</p>
+                </div>
+            </a>
+
+            <a href="{% url 'upload_cv' %}" class="feature-card-link">
+                <div class="feature-card animated-card" style="animation-delay: 1.25s;">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>2. AI Analysis</h3>
+                    <p>Advanced AI extracts your skills, experience, and matches you with relevant job opportunities.</p>
+                </div>
+            </a>
+
+            <a href="{% url 'upload_cv' %}" class="feature-card-link">
+                <div class="feature-card animated-card" style="animation-delay: 2.5s;">
+                    <div class="feature-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>3. Job Preferences</h3>
+                    <p>Specify your preferred job type, location, and experience level for personalized results.</p>
+                </div>
+            </a>
+
+            <a href="{% url 'upload_cv' %}" class="feature-card-link">
+                <div class="feature-card animated-card" style="animation-delay: 3.75s;">
+                    <div class="feature-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <h3>4. Get Verified Jobs</h3>
+                    <p>Receive curated job listings with verified links from trusted sources like LinkedIn, Indeed, and government portals.</p>
+                </div>
+            </a>
+        </div>
+
+        <style>
+        @keyframes colorChange {
+            0% {
+                background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                transform: translateY(0px);
+            }
+            20% {
+                background-image: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                transform: translateY(-5px);
+            }
+            40% {
+                background-image: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+                transform: translateY(0px);
+            }
+            60% {
+                background-image: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+                transform: translateY(-5px);
+            }
+            80% {
+                background-image: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+                transform: translateY(0px);
+            }
+            100% {
+                background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                transform: translateY(-5px);
+            }
+        }
+
+        .feature-card-link {
+            text-decoration: none;
+            display: block;
+            cursor: pointer;
+        }
+
+        .animated-card {
+            animation: colorChange 10s linear infinite;
+            background-size: 200% 200%;
+        }
+
+        .animated-card:hover {
+            transform: translateY(-10px) scale(1.05) !important;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2) !important;
+        }
+
+        .animated-card .feature-icon {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .animated-card .feature-icon i {
+            font-size: 48px;
+            color: white;
+        }
+
+        .animated-card h3 {
+            color: white;
+            font-size: 24px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .animated-card p {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        @keyframes titleColorChange {
+            0% {
+                background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+            20% {
+                background-image: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+            40% {
+                background-image: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+            60% {
+                background-image: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+            80% {
+                background-image: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+            100% {
+                background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+        }
+
+        .animated-title {
+            background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            background-clip: text !important;
+            font-size: 48px !important;
+            font-weight: 700 !important;
+            text-align: center !important;
+            margin-bottom: 20px !important;
+            transition: all 1s ease !important;
+        }
+        </style>
+    </div>
+</div>
+
+<div class="trusted-sources-section">
+    <div class="container">
+        <h2 class="section-title animated-title">Trusted Job Sources</h2>
+        <p class="section-subtitle">We only provide links from verified and reputable platforms</p>
+        
+        <div class="sources-grid">
+            <div class="source-item animated-source-item">
+                <i class="fab fa-linkedin"></i>
+                <span>LinkedIn</span>
+            </div>
+            <div class="source-item animated-source-item" style="animation-delay: 0.83s;">
+                <i class="fas fa-building"></i>
+                <span>Indeed</span>
+            </div>
+            <div class="source-item animated-source-item" style="animation-delay: 1.67s;">
+                <i class="fas fa-star"></i>
+                <span>Glassdoor</span>
+            </div>
+            <div class="source-item animated-source-item" style="animation-delay: 2.5s;">
+                <i class="fas fa-landmark"></i>
+                <span>Government Portals</span>
+            </div>
+            <div class="source-item animated-source-item" style="animation-delay: 3.33s;">
+                <i class="fas fa-globe"></i>
+                <span>Company Career Pages</span>
+            </div>
+            <div class="source-item animated-source-item" style="animation-delay: 4.17s;">
+                <i class="fas fa-shield-alt"></i>
+                <span>Verified Only</span>
+            </div>
+        </div>
+
+        <style>
+        @keyframes sourceColorChange {
+            0% {
+                background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            }
+            20% {
+                background-image: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                box-shadow: 0 4px 15px rgba(240, 147, 251, 0.3);
+            }
+            40% {
+                background-image: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+                box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+            }
+            60% {
+                background-image: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+                box-shadow: 0 4px 15px rgba(67, 233, 123, 0.3);
+            }
+            80% {
+                background-image: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+                box-shadow: 0 4px 15px rgba(250, 112, 154, 0.3);
+            }
+            100% {
+                background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            }
+        }
+
+        .animated-source-item {
+            background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            transition: all 1s ease !important;
+        }
+
+        .animated-source-item:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2) !important;
+        }
+
+        .animated-source-item i {
+            color: white !important;
+            font-size: 2rem;
+        }
+
+        .animated-source-item span {
+            color: white !important;
+            font-weight: 600;
+        }
+        </style>
+    </div>
+</div>
+
+<div class="cta-section">
+    <div class="container">
+        <div class="cta-content">
+            <h2>Ready to Find Your Dream Job?</h2>
+            <p>Let AI help you discover the perfect career opportunity</p>
+            <a href="{% url 'upload_cv' %}" class="btn btn-primary btn-large">
+                <i class="fas fa-rocket"></i> Get Started Now
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const gradients = [
+        'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+        'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+        'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+        'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+        'linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%)',
+        'linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%)',
+        'linear-gradient(135deg, #fd79a8 0%, #e84393 100%)',
+        'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+        'linear-gradient(135deg, #fdcb6e 0%, #e17055 100%)'
+    ];
+
+    const titleGradients = [
+        'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+        'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+        'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+        'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+        'linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%)',
+        'linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%)',
+        'linear-gradient(135deg, #fd79a8 0%, #e84393 100%)',
+        'linear-gradient(135deg, #00b894 0%, #00cec9 100%)',
+        'linear-gradient(135deg, #fdcb6e 0%, #e17055 100%)'
+    ];
+
+    let currentIndex = 0;
+
+    function changeColors() {
+        currentIndex = (currentIndex + 1) % gradients.length;
+
+        // Change feature cards
+        const cards = document.querySelectorAll('.animated-card');
+        cards.forEach(card => {
+            card.style.backgroundImage = gradients[currentIndex];
+        });
+
+        // Change titles
+        const titles = document.querySelectorAll('.animated-title');
+        titles.forEach(title => {
+            title.style.backgroundImage = titleGradients[currentIndex];
+            title.style.webkitBackgroundClip = 'text';
+            title.style.webkitTextFillColor = 'transparent';
+            title.style.backgroundClip = 'text';
+        });
+
+        // Change source items
+        const sources = document.querySelectorAll('.animated-source-item');
+        sources.forEach(source => {
+            source.style.backgroundImage = gradients[currentIndex];
+        });
+    }
+
+    // Change colors every 5 seconds
+    setInterval(changeColors, 5000);
+});
+</script>
+{% endblock %}

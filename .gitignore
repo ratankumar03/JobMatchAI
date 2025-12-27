@@ -1,0 +1,36 @@
+﻿# Python
+*.py[cod]
+__pycache__/
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Virtual Environment (CRITICAL - Don't commit this!)
+venv/
+env/
+ENV/
+.venv/
+
+# Django
+*.log
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+
+# Secrets (CRITICAL - Don't commit these!)
+.env
+*.env
+**/*.env
+SETUP_GUIDE.txt
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
